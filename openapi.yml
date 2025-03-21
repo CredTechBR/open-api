@@ -1,70 +1,39 @@
 openapi: 3.0.3
 info:
-  title: Pet Store API
-  description: A simple API to manage a pet store inventory.
+  title: RevPay API
+  description: API for managing purchase pre-approvals and payment links.
   version: 1.0.0
   contact:
-    name: API Support
-    email: support@petstore.com
+    name: RevPay Support
+    email: support@revpay.com.br
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.petstore.com/v1
-    description: Production server
-  - url: http://localhost:3000/v1
-    description: Local development server
+  - url: https://service-develop.revpay.com.br
+    description: Development server
 
 paths:
-  /pets:
-    get:
-      summary: List all pets
-      description: Returns a list of all pets in the store.
-      operationId: listPets
-      parameters:
-        - name: limit
-          in: query
-          description: Maximum number of pets to return
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 10
-      responses:
-        '200':
-          description: A list of pets
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid request parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+  /purchase/pre-aproval:
     post:
-      summary: Create a new pet
-      description: Adds a new pet to the store inventory.
-      operationId: createPet
+      summary: Create a credit analysis pre-approval
+      description: Submits a request for credit analysis pre-approval based on user details.
+      operationId: createCreditAnalysis
       requestBody:
-        description: Pet object to add to the store
+        description: User details for credit analysis
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PetInput'
+              $ref: '#/components/schemas/CreateCreditAnalysisDTO'
       responses:
         '201':
-          description: Pet created successfully
+          description: Credit analysis created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/CreateCreditAnalysisResponseDTO'
         '400':
           description: Invalid input
           content:
@@ -72,47 +41,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /pets/{petId}:
-    get:
-      summary: Get a pet by ID
-      description: Returns a single pet based on its ID.
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of the pet to retrieve
-          required: true
-          schema:
-            type: string
+  /purchase/create-payment-link:
+    post:
+      summary: Create a payment link
+      description: Generates a payment link for a purchase based on provided details.
+      operationId: createPaymentLink
+      requestBody:
+        description: Payment details to generate a link
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentDTO'
       responses:
-        '200':
-          description: Pet found
+        '201':
+          description: Payment link created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
-        '404':
-          description: Pet not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    delete:
-      summary: Delete a pet
-      description: Removes a pet from the store by ID.
-      operationId: deletePet
-      parameters:
-        - name: petId
-          in: path
-          description: ID of the pet to delete
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Pet deleted successfully
-        '404':
-          description: Pet not found
+                $ref: '#/components/schemas/CreatePaymentResponseDTO'
+        '400':
+          description: Invalid input
           content:
             application/json:
               schema:
@@ -120,56 +69,123 @@ paths:
 
 components:
   schemas:
-    Pet:
+    CreateCreditAnalysisDTO:
       type: object
       required:
-        - id
-        - name
-        - species
+        - cpf
+        - birthdate
+        - phone
       properties:
-        id:
+        cpf:
           type: string
-          example: "pet_123"
+          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          example: "123.456.789-00"
+        birthdate:
+          type: string
+          description: User's birth date
+          example: "1990-01-01"
+        phone:
+          type: string
+          description: User's phone number
+          example: "+5511999999999"
         name:
           type: string
-          example: "Fluffy"
-        species:
+          description: User's full name
+          example: "João Silva"
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "joao.silva@example.com"
+        occupation:
+          type: string
+          description: User's occupation
+          example: "Software Engineer"
+        nationality:
+          type: string
+          description: User's nationality
+          example: "Brazilian"
+        address:
+          type: object
+          properties:
+            street_name:
+              type: string
+              example: "Rua das Flores"
+            number:
+              type: string
+              example: "123"
+            neighborhood:
+              type: string
+              example: "Centro"
+            zip_code:
+              type: string
+              example: "12345-678"
+            city:
+              type: string
+              example: "São Paulo"
+            state:
+              type: string
+              example: "SP"
+            complement:
+              type: string
+              example: "Apto 45"
+
+    CreateCreditAnalysisResponseDTO:
+      type: object
+      properties:
+        limit:
+          type: number
+          description: Credit limit assigned to the user
+          example: 5000
+        status:
           type: string
           enum:
-            - dog
-            - cat
-            - bird
-          example: "dog"
-        age:
-          type: integer
-          minimum: 0
-          example: 3
-        owner:
-          type: string
-          example: "John Doe"
-    PetInput:
+            - approved
+            - rejected
+            - pending
+          description: Status of the credit analysis
+          example: "approved"
+
+    CreatePaymentDTO:
       type: object
       required:
-        - name
-        - species
+        - cpf
+        - installments
+        - marketToken
+        - total_value
       properties:
-        name:
+        cpf:
           type: string
-          example: "Fluffy"
-        species:
-          type: string
-          enum:
-            - dog
-            - cat
-            - bird
-          example: "dog"
-        age:
+          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          example: "123.456.789-00"
+        installments:
           type: integer
-          minimum: 0
-          example: 3
-        owner:
+          description: Number of payment installments
+          example: 12
+        marketToken:
           type: string
-          example: "John Doe"
+          description: Token identifying the market or merchant
+          example: "market_abc123"
+        total_value:
+          type: number
+          description: Total value of the purchase
+          example: 1200.50
+
+    CreatePaymentResponseDTO:
+      type: object
+      required:
+        - paymentLink
+        - paymentId
+      properties:
+        paymentLink:
+          type: string
+          description: URL for the payment link
+          example: "https://service-develop.revpay.com.br/pay/abc123"
+        paymentId:
+          type: string
+          description: Unique identifier for the payment
+          example: "pay_abc123"
+
     Error:
       type: object
       required:
