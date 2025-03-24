@@ -1,27 +1,27 @@
 openapi: 3.0.3
 info:
   title: RevPay API
-  description: API for managing purchase pre-approvals and payment links.
+  description: API para gerenciar pré-aprovações de compras e links de pagamento.
   version: 1.0.0
   contact:
-    name: RevPay Support
-    email: support@revpay.com.br
+    name: Suporte RevPay
+    email: suporte@revpay.com.br
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://service-develop.revpay.com.br
-    description: Development server
+    description: Servidor de desenvolvimento
 
 paths:
   /purchase/pre-aproval:
     post:
-      summary: Create a credit analysis pre-approval
-      description: Submits a request for credit analysis pre-approval based on user details.
+      summary: Criar uma pré-aprovação de análise de crédito
+      description: Envia uma solicitação para pré-aprovação de análise de crédito com base nos detalhes do usuário.
       operationId: createCreditAnalysis
       requestBody:
-        description: User details for credit analysis
+        description: Detalhes do usuário para análise de crédito
         required: true
         content:
           application/json:
@@ -29,13 +29,13 @@ paths:
               $ref: '#/components/schemas/CreateCreditAnalysisDTO'
       responses:
         '201':
-          description: Credit analysis created successfully
+          description: Análise de crédito criada com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateCreditAnalysisResponseDTO'
         '400':
-          description: Invalid input
+          description: Entrada inválida
           content:
             application/json:
               schema:
@@ -43,11 +43,11 @@ paths:
 
   /purchase/create-payment:
     post:
-      summary: Create a payment link
-      description: Generates a payment link for a purchase based on provided details.
+      summary: Criar um link de pagamento
+      description: Gera um link de pagamento para uma compra com base nos detalhes fornecidos.
       operationId: createPaymentLink
       requestBody:
-        description: Payment details to generate a link
+        description: Detalhes do pagamento para gerar um link
         required: true
         content:
           application/json:
@@ -55,13 +55,13 @@ paths:
               $ref: '#/components/schemas/CreatePaymentDTO'
       responses:
         '201':
-          description: Payment link created successfully
+          description: Link de pagamento criado com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreatePaymentResponseDTO'
         '400':
-          description: Invalid input
+          description: Entrada inválida
           content:
             application/json:
               schema:
@@ -69,26 +69,26 @@ paths:
 
   /get-payment-info:
     get:
-      summary: Retrieve payment information
-      description: Retrieves the status of a payment based on the invoice ID.
+      summary: Obter informações de pagamento
+      description: Recupera o status de um pagamento com base no ID da fatura.
       operationId: getPaymentInfo
       parameters:
         - name: invoiceId
           in: query
-          description: Unique identifier of the invoice
+          description: Identificador único da fatura
           required: true
           schema:
             type: string
             example: "inv_12345"
       responses:
         '200':
-          description: Payment information retrieved successfully
+          description: Informações de pagamento recuperadas com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPaymentInformationResponseDTO'
         '400':
-          description: Invalid input
+          description: Entrada inválida
           content:
             application/json:
               schema:
@@ -96,26 +96,26 @@ paths:
 
   /get-client-info:
     get:
-      summary: Retrieve client information
-      description: Retrieves the status and credit limit of a client based on their CPF.
+      summary: Obter informações do cliente
+      description: Recupera o status e o limite de crédito de um cliente com base no CPF.
       operationId: getClientInfo
       parameters:
         - name: cpf
           in: query
-          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          description: CPF brasileiro (Cadastro de Pessoas Físicas)
           required: true
           schema:
             type: string
             example: "123.456.789-00"
       responses:
         '200':
-          description: Client information retrieved successfully
+          description: Informações do cliente recuperadas com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetResellerInformationResponseDTO'
         '400':
-          description: Invalid input
+          description: Entrada inválida
           content:
             application/json:
               schema:
@@ -123,11 +123,11 @@ paths:
 
   /register-webhook:
     post:
-      summary: Register a webhook
-      description: Registers a webhook URL to receive notifications.
+      summary: Registrar um webhook
+      description: Registra uma URL de webhook para receber notificações.
       operationId: registerWebhook
       requestBody:
-        description: Webhook URL to register
+        description: URL do webhook a ser registrado
         required: true
         content:
           application/json:
@@ -135,13 +135,13 @@ paths:
               $ref: '#/components/schemas/RegisterWebhookDTO'
       responses:
         '201':
-          description: Webhook registered successfully
+          description: Webhook registrado com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisterWebhookResponseDTO'
         '400':
-          description: Invalid input
+          description: Entrada inválida
           content:
             application/json:
               schema:
@@ -158,64 +158,71 @@ components:
       properties:
         cpf:
           type: string
-          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          description: CPF brasileiro (Cadastro de Pessoas Físicas)
           example: "123.456.789-00"
         birthdate:
           type: string
-          description: User's birth date
+          description: Data de nascimento do usuário
           example: "1990-01-01"
         phone:
           type: string
-          description: User's phone number
+          description: Número de telefone do usuário
           example: "+5511999999999"
         name:
           type: string
-          description: User's full name
+          description: Nome completo do usuário
           example: "João Silva"
         email:
           type: string
           format: email
-          description: User's email address
+          description: Endereço de e-mail do usuário
           example: "joao.silva@example.com"
         occupation:
           type: string
-          description: User's occupation
-          example: "Software Engineer"
+          description: Ocupação do usuário
+          example: "Engenheiro de Software"
         nationality:
           type: string
-          description: User's nationality
-          example: "Brazilian"
+          description: Nacionalidade do usuário
+          example: "Brasileiro"
         address:
           type: object
           properties:
             street_name:
               type: string
               example: "Rua das Flores"
+              description: Nome da rua
             number:
               type: string
               example: "123"
+              description: Número do endereço
             neighborhood:
               type: string
               example: "Centro"
+              description: Bairro
             zip_code:
               type: string
               example: "12345-678"
+              description: CEP
             city:
               type: string
               example: "São Paulo"
+              description: Cidade
             state:
               type: string
               example: "SP"
+              description: Estado
             complement:
               type: string
               example: "Apto 45"
+              description: Complemento do endereço
 
     CreateCreditAnalysisResponseDTO:
       type: object
       properties:
         limit:
           type: number
-          description: Credit limit assigned to the user
+          description: Limite de crédito atribuído ao usuário
           example: 5000
         status:
           type: string
@@ -223,7 +230,7 @@ components:
             - approved
             - rejected
             - pending
-          description: Status of the credit analysis
+          description: Status da análise de crédito
           example: "approved"
 
     CreatePaymentDTO:
@@ -236,19 +243,19 @@ components:
       properties:
         cpf:
           type: string
-          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          description: CPF brasileiro (Cadastro de Pessoas Físicas)
           example: "123.456.789-00"
         installments:
           type: integer
-          description: Number of payment installments
+          description: Número de parcelas do pagamento
           example: 12
         marketToken:
           type: string
-          description: Token identifying the market or merchant
+          description: Token que identifica o mercado ou comerciante
           example: "market_abc123"
         total_value:
           type: number
-          description: Total value of the purchase
+          description: Valor total da compra
           example: 1200.50
 
     CreatePaymentResponseDTO:
@@ -259,11 +266,11 @@ components:
       properties:
         paymentLink:
           type: string
-          description: URL for the payment link
+          description: URL do link de pagamento
           example: "https://service-develop.revpay.com.br/pay/abc123"
         paymentId:
           type: string
-          description: Unique identifier for the payment
+          description: Identificador único do pagamento
           example: "pay_abc123"
 
     GetPaymentInformationDTO:
@@ -273,7 +280,7 @@ components:
       properties:
         invoiceId:
           type: string
-          description: Unique identifier of the invoice
+          description: Identificador único da fatura
           example: "inv_12345"
 
     GetPaymentInformationResponseDTO:
@@ -281,7 +288,7 @@ components:
       properties:
         status:
           type: string
-          description: Status of the payment
+          description: Status do pagamento
           example: "completed"
 
     GetResellerInformationDTO:
@@ -291,7 +298,7 @@ components:
       properties:
         cpf:
           type: string
-          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          description: CPF brasileiro (Cadastro de Pessoas Físicas)
           example: "123.456.789-00"
 
     GetResellerInformationResponseDTO:
@@ -299,11 +306,11 @@ components:
       properties:
         status:
           type: string
-          description: Status of the client
+          description: Status do cliente
           example: "active"
         limit:
           type: string
-          description: Credit limit of the client
+          description: Limite de crédito do cliente
           example: "5000"
 
     RegisterWebhookDTO:
@@ -313,7 +320,7 @@ components:
       properties:
         url:
           type: string
-          description: Webhook URL to register
+          description: URL do webhook a ser registrado
           example: "https://example.com/webhook"
 
     RegisterWebhookResponseDTO:
@@ -321,7 +328,7 @@ components:
       properties:
         url:
           type: string
-          description: Registered webhook URL
+          description: URL do webhook registrado
           example: "https://example.com/webhook"
 
     Error:
@@ -333,6 +340,8 @@ components:
         code:
           type: integer
           example: 400
+          description: Código do erro
         message:
           type: string
-          example: "Invalid request"
+          example: "Requisição inválida"
+          description: Mensagem de erro
