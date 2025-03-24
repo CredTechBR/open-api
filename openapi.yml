@@ -41,7 +41,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /purchase/create-payment-link:
+  /purchase/create-payment:
     post:
       summary: Create a payment link
       description: Generates a payment link for a purchase based on provided details.
@@ -60,6 +60,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreatePaymentResponseDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /get-payment-info:
+    get:
+      summary: Retrieve payment information
+      description: Retrieves the status of a payment based on the invoice ID.
+      operationId: getPaymentInfo
+      parameters:
+        - name: invoiceId
+          in: query
+          description: Unique identifier of the invoice
+          required: true
+          schema:
+            type: string
+            example: "inv_12345"
+      responses:
+        '200':
+          description: Payment information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPaymentInformationResponseDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /get-client-info:
+    get:
+      summary: Retrieve client information
+      description: Retrieves the status and credit limit of a client based on their CPF.
+      operationId: getClientInfo
+      parameters:
+        - name: cpf
+          in: query
+          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          required: true
+          schema:
+            type: string
+            example: "123.456.789-00"
+      responses:
+        '200':
+          description: Client information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetResellerInformationResponseDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /register-webhook:
+    post:
+      summary: Register a webhook
+      description: Registers a webhook URL to receive notifications.
+      operationId: registerWebhook
+      requestBody:
+        description: Webhook URL to register
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterWebhookDTO'
+      responses:
+        '201':
+          description: Webhook registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterWebhookResponseDTO'
         '400':
           description: Invalid input
           content:
@@ -185,6 +265,64 @@ components:
           type: string
           description: Unique identifier for the payment
           example: "pay_abc123"
+
+    GetPaymentInformationDTO:
+      type: object
+      required:
+        - invoiceId
+      properties:
+        invoiceId:
+          type: string
+          description: Unique identifier of the invoice
+          example: "inv_12345"
+
+    GetPaymentInformationResponseDTO:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the payment
+          example: "completed"
+
+    GetResellerInformationDTO:
+      type: object
+      required:
+        - cpf
+      properties:
+        cpf:
+          type: string
+          description: Brazilian CPF (Cadastro de Pessoas Físicas)
+          example: "123.456.789-00"
+
+    GetResellerInformationResponseDTO:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the client
+          example: "active"
+        limit:
+          type: string
+          description: Credit limit of the client
+          example: "5000"
+
+    RegisterWebhookDTO:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          description: Webhook URL to register
+          example: "https://example.com/webhook"
+
+    RegisterWebhookResponseDTO:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Registered webhook URL
+          example: "https://example.com/webhook"
 
     Error:
       type: object
