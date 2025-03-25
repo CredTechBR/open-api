@@ -67,7 +67,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /get-payment-info:
+  /purchase/get-payment-info:
     get:
       summary: Obter informações de pagamento
       description: Recupera o status de um pagamento com base no ID da fatura.
@@ -94,7 +94,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /get-client-info:
+  /purchase/get-client-info:
     get:
       summary: Obter informações do cliente
       description: Recupera o status e o limite de crédito de um cliente com base no CPF.
@@ -121,7 +121,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /register-webhook:
+  /purchase/register-webhook:
     post:
       summary: Registrar um webhook
       description: Registra uma URL de webhook para receber notificações.
