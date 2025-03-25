@@ -73,7 +73,7 @@ paths:
       description: Recupera o status de um pagamento com base no ID da fatura.
       operationId: getPaymentInfo
       parameters:
-        - name: invoiceId
+        - name: paymentId
           in: query
           description: Identificador único da fatura
           required: true
@@ -278,7 +278,7 @@ components:
       required:
         - invoiceId
       properties:
-        invoiceId:
+        paymentId:
           type: string
           description: Identificador único da fatura
           example: "inv_12345"
