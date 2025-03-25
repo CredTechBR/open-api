@@ -15,7 +15,7 @@ servers:
     description: Servidor de desenvolvimento
 
 paths:
-  /purchase/pre-aproval:
+  /purchase/pre-approval:
     post:
       summary: Criar uma pré-aprovação de análise de crédito
       description: Envia uma solicitação para pré-aprovação de análise de crédito com base nos detalhes do usuário.
