@@ -160,6 +160,10 @@ components:
           type: string
           description: CPF brasileiro (Cadastro de Pessoas Físicas)
           example: "123.456.789-00"
+        name:
+          type: string
+          description: Nome completo do usuário
+          example: "João Silva"
         birthdate:
           type: string
           description: Data de nascimento do usuário
@@ -168,10 +172,7 @@ components:
           type: string
           description: Número de telefone do usuário
           example: "+5511999999999"
-        name:
-          type: string
-          description: Nome completo do usuário
-          example: "João Silva"
+
         email:
           type: string
           format: email
@@ -181,10 +182,6 @@ components:
           type: string
           description: Ocupação do usuário
           example: "Engenheiro de Software"
-        nationality:
-          type: string
-          description: Nacionalidade do usuário
-          example: "Brasileiro"
         address:
           type: object
           properties:
